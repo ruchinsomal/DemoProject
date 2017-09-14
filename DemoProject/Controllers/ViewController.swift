@@ -79,6 +79,66 @@ class ViewController: UIViewController {
         lastIndex = button.tag
     }
     
+    //-----------------------------------------------------------
+    // MARK: - get data from server
+    //-----------------------------------------------------------
+    
+    func getdata()  {
+        MyLoader.showLoadingView()
+        let params:[String: Any] = ["":""]
+        getRequest(kApi_url, params: params as [String : AnyObject]?,oauth: true, result: {
+            (response: JSON?, error: NSError?, statuscode: Int) in
+            MyLoader.hideLoadingView()
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    self.view.makeToast(error!.localizedDescription, duration: 2.0, position: CSToastPositionCenter)
+                }
+                return
+            }
+            if response!["status"].stringValue == "fail" {
+                showAlertView(title: "Error", message: response!["reason"].stringValue, ref: self)
+            } else {
+                if statuscode == 200
+                {
+                    print("your get response is \(response!)")
+                }else {
+                    showAlertView(title: "Error", message: "Something went wrong. We are Working on it.", ref: self)
+                }
+            }
+        })
+        
+    }
+    
+    //-----------------------------------------------------------
+    // MARK: - post data to server
+    //-----------------------------------------------------------
+    
+    func postdata()  {
+        MyLoader.showLoadingView()
+        let params:[String: Any] = ["":""]
+        postRequest(kApi_url, params: params as [String : AnyObject]?,oauth: true, result: {
+            (response: JSON?, error: NSError?, statuscode: Int) in
+            MyLoader.hideLoadingView()
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    self.view.makeToast(error!.localizedDescription, duration: 2.0, position: CSToastPositionCenter)
+                }
+                return
+            }
+            if response!["status"].stringValue == "fail" {
+                showAlertView(title: "Error", message: response!["reason"].stringValue, ref: self)
+            } else {
+                if statuscode == 200
+                {
+                    print("your post response is \(response!)")
+                }else {
+                    showAlertView(title: "Error", message: "Something went wrong. We are Working on it.", ref: self)
+                }
+            }
+        })
+        
+    }
+    
 }
 extension ViewController: UITableViewDelegate {
 }
@@ -158,8 +218,6 @@ extension ViewController: UICollectionViewDataSource {
     }
 }
 extension ViewController: UICollectionViewDelegateFlowLayout {
-    
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width:(self.view.bounds.size.width / 7.0) - 1.0 ,height:99.0)
     }
