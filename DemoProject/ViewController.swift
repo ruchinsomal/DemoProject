@@ -73,7 +73,9 @@ class ViewController: UIViewController {
         datesArr.remove(at: button.tag)
         datesArr.insert(tempDict as AnyObject, at: button.tag)
         
-        ctnDate.reloadData()
+        let index1 = IndexPath(item: lastIndex, section: 0)
+        let index2 = IndexPath(item: button.tag, section: 0)
+        ctnDate.reloadItems(at: [index1,index2])
         lastIndex = button.tag
     }
     
